@@ -9,11 +9,22 @@ export class TaskService {
     private tasks: Task[];
     private dataChanged: EventEmitter<Task[]> = new EventEmitter();
     private taskCreated: EventEmitter<Task> = new EventEmitter();
-    private taskUpdated: EventEmitter<Task> = new EventEmitter();
     private taskDeleted: EventEmitter<any> = new EventEmitter();
 
     constructor() {
-        this.tasks = JSON.parse(localStorage.getItem(TASKS_STORAGE_KEY)) || [];
+        this.tasks = JSON.parse(localStorage.getItem(TASKS_STORAGE_KEY));
+
+        if (!this.tasks) { //Init tasks lists when 'never' used before
+            this.tasks = [
+                new Task({ id: 1, title: 'Create a module' }),
+                new Task({ id: 2, title: 'Create a component' }),
+                new Task({ id: 3, title: 'Create a service' }),
+                new Task({ id: 4, title: 'Make all the things work together' }),
+                new Task({ id: 5, title: 'Enjoy :)' }),
+            ];
+
+            this.persist();
+        }
     }
 
     getAll() {
@@ -40,21 +51,6 @@ export class TaskService {
         this.taskCreated.emit(task);
     }
 
-    update(task: Task) {
-        this.tasks.forEach(storedTask => {
-            if (storedTask.id === task.id) {
-                let index = this.tasks.indexOf(storedTask);
-                delete this.tasks[index];
-
-                this.tasks[index] = task;
-                this.persist();
-            }
-        });
-
-        this.dataChanged.emit(this.tasks);
-        this.taskUpdated.emit(task);
-    }
-
     delete(id: number) {
         this.tasks.forEach(task => {
             if (task.id === id) {
@@ -74,10 +70,6 @@ export class TaskService {
 
     getTaskCreatedEmitter() {
         return this.taskCreated;
-    }
-
-    getTaskUpdatedEmitter() {
-        return this.taskUpdated;
     }
 
     getTaskDeletedEmitter() {

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, SimpleChange, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MdSnackBar } from '@angular/material';
 
 import { Task } from '../task.model';
 import { TaskService } from '../task.service';
@@ -13,15 +14,14 @@ import { Subscriber } from "rxjs/Subscriber";
 export class TaskListComponent implements OnInit, OnDestroy {
     private taskForm: FormGroup;
     private tasks: Task[];
-    private notificationMessage: string;
     private dataChangeSubscriber: any;
     private taskCreateSubscriber: any;
-    private taskUpdateSubscriber: any;
     private taskDeleteSubscriber: any;
 
     constructor(
         private formBuilder: FormBuilder,
-        private service: TaskService
+        private service: TaskService,
+        private snackBar: MdSnackBar
     ) {
         this.createForm();
     }
@@ -29,15 +29,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.service.getAll().then((tasks: Task[]) => this.tasks = tasks);
         this.dataChangeSubscriber = this.service.getDataChangedEmitter().subscribe(tasks => this.tasks = tasks);
-        this.taskCreateSubscriber = this.service.getTaskCreatedEmitter().subscribe(task => this.notificationMessage = `Task <b>${task.title}</b> successfully created.`);
-        this.taskUpdateSubscriber = this.service.getTaskUpdatedEmitter().subscribe(task => this.notificationMessage = `Task <b>${task.title}</b> successfully updated.`);
-        this.taskDeleteSubscriber = this.service.getTaskDeletedEmitter().subscribe(id => this.notificationMessage = `Task <b>#${id}</b> successfully deleted.`);
+        this.taskCreateSubscriber = this.service.getTaskCreatedEmitter().subscribe(task => this.openSnackBar('Task successfully created.'));
+        this.taskDeleteSubscriber = this.service.getTaskDeletedEmitter().subscribe(id => this.openSnackBar('Task successfully deleted.'));
     }
 
     ngOnDestroy() {
         this.dataChangeSubscriber.unsubscribe();
         this.taskCreateSubscriber.unsubscribe();
-        this.taskUpdateSubscriber.unsubscribe();
         this.taskDeleteSubscriber.unsubscribe();
     }
 
@@ -51,7 +49,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
 
     onChange() {
-        console.log('onChange');
         this.service.persist();
     }
 
@@ -62,6 +59,12 @@ export class TaskListComponent implements OnInit, OnDestroy {
     private createForm() {
         this.taskForm = this.formBuilder.group({
             title: ['', Validators.required]
+        });
+    }
+
+    private openSnackBar(message: string, action?: string) {
+        this.snackBar.open(message, action, {
+            duration: 4000,
         });
     }
 }

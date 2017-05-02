@@ -1,0 +1,8 @@
+.full-width {
+    width: 100%;
+}
+
+.task.done {
+    color: #e91e63;
+    text-decoration: line-through;
+}

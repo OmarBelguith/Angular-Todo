@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '@angular/material';
 
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskService } from './task.service';
@@ -9,7 +10,8 @@ import { TaskService } from './task.service';
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MaterialModule
     ],
     declarations: [TaskListComponent],
     exports: [TaskListComponent],

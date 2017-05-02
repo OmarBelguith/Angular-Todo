@@ -1,19 +1,30 @@
-<div *ngFor="let task of tasks">
-    <p>
-        #{{task.id}}
-        <input [(ngModel)]="task.title" (ngModelChange)="onChange($event)" [value]="task.title" />
-        <button (click)="update(task)">Update</button>
-        <button (click)="delete(task)">Delete</button>
-    </p>
-</div>
-
-<h2>Add new task</h2>
-
-<form [formGroup]="taskForm" (submit)="onSubmit($event)" novalidate>
-    <div class="form-group">
-        <label class="center-block">Title: <input class="form-control" formControlName="title"></label>
-    </div>
-    <button type="submit" [disabled]="taskForm.pristine || !taskForm.valid">Add</button>
-</form>
-
-<div [innerHtml]="notificationMessage"></div>
+<table class="full-width" cellspacing="0">
+    <tr *ngFor="let task of tasks">
+        <td>
+            <md-checkbox [(ngModel)]="task.done" (ngModelChange)="onChange($event)" [checked]="task.done"></md-checkbox>
+        </td>
+        <td>
+            <md-input-container class="full-width">
+                <input type="text" mdInput [(ngModel)]="task.title" (ngModelChange)="onChange($event)" [value]="task.title" [disabled]="task.done"
+                    class="task" [ngClass]="{'done': task.done}">
+            </md-input-container>
+        </td>
+        <td>
+            <button md-icon-button color="primary" (click)="delete(task)">
+                <i class="material-icons">clear</i>
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <form [formGroup]="taskForm" (submit)="onSubmit($event)" novalidate>
+                <md-input-container>
+                    <input mdInput placeholder="New task" formControlName="title">
+                </md-input-container>
+                <button md-raised-button color="primary" type="submit" [disabled]="taskForm.pristine || !taskForm.valid">
+                    <i class="material-icons">add</i>
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>

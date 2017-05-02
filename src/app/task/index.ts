@@ -1,1 +1,5 @@
-export * from './task.module';
+export * from './category.model'
+export * from './task.model'
+export * from './task.service'
+export * from './task-list'
+export * from './task.module'
