@@ -1,0 +1,19 @@
+<div *ngFor="let task of tasks">
+    <p>
+        #{{task.id}}
+        <input [(ngModel)]="task.title" (ngModelChange)="onChange($event)" [value]="task.title" />
+        <button (click)="update(task)">Update</button>
+        <button (click)="delete(task)">Delete</button>
+    </p>
+</div>
+
+<h2>Add new task</h2>
+
+<form [formGroup]="taskForm" (submit)="onSubmit($event)" novalidate>
+    <div class="form-group">
+        <label class="center-block">Title: <input class="form-control" formControlName="title"></label>
+    </div>
+    <button type="submit" [disabled]="taskForm.pristine || !taskForm.valid">Add</button>
+</form>
+
+<div [innerHtml]="notificationMessage"></div>
