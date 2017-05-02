@@ -1,4 +1,4 @@
-# AngularTodo
+# Angular4+ Todos App
 
 Useful App to see some Angular basics in action (Modules, Components, Models/Interfaces, Services, Forms...).
 
