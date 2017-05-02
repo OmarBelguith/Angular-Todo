@@ -8,10 +8,35 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        .loading {
+            transition: opacity .2s ease-in-out;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: #3f51b5;
+        }
+        
+        .loading h1 {
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            color: #EEE;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            transform: translate(0, -50%);
+        }
+    </style>
 </head>
 
 <body>
-    <app-root>Loading...</app-root>
+    <app-root>
+        <div class="loading">
+            <h1>Loading, please wait...</h1>
+        </div>
+    </app-root>
 </body>
 
 </html>
